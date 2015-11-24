@@ -1,11 +1,15 @@
-//merge for master & testing
+<<<<<<< HEAD
+//in master, add in testing
+=======
+﻿//add in testing
+>>>>>>> testing
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using Outlook = Microsoft.Office.Interop.Outlook;
-using Word = Microsoft.Office.Interop.Word;
+using Office = Microsoft.Office.Core;
 
 namespace MaycroftOL
 {
@@ -13,7 +17,6 @@ namespace MaycroftOL
     {
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
-            
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
