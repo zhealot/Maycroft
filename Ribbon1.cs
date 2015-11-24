@@ -12,5 +12,11 @@ namespace MaycroftOL
         {
 
         }
+
+        private void button1_Click(object sender, RibbonControlEventArgs e)
+        {
+            SettingForm SettingForm = new SettingForm();
+            SettingForm.Show();
+        }
     }
 }
