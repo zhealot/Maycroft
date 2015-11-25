@@ -15,8 +15,9 @@ namespace MaycroftOL
 
         private void button1_Click(object sender, RibbonControlEventArgs e)
         {
-            SettingForm SettingForm = new SettingForm();
-            SettingForm.Show();
+            Form1 SetupForm = new Form1();
+            SetupForm.Show();
+            SetupForm.Controls.Find("tbName", true)[0].Focus();
         }
     }
 }

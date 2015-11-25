@@ -13,6 +13,7 @@ namespace MaycroftOL
     {
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
+            Ribbon1 rb1 = new Ribbon1();
             
         }
 
