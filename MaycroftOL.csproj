@@ -27,17 +27,40 @@
     <NoStandardLibraries>false</NoStandardLibraries>
     <RootNamespace>MaycroftOL</RootNamespace>
     <AssemblyName>MaycroftOL</AssemblyName>
-    <LoadBehavior>3</LoadBehavior>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <DefineConstants>VSTO40</DefineConstants>
+    <IsWebBootstrapper>False</IsWebBootstrapper>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <BootstrapperComponentsLocation>HomeSite</BootstrapperComponentsLocation>
+    <PublishUrl>C:\Users\Tao\Downloads\Publish\</PublishUrl>
+    <InstallUrl />
+    <TargetCulture>en</TargetCulture>
+    <ApplicationVersion>1.0.0.7</ApplicationVersion>
+    <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>days</UpdateIntervalUnits>
+    <ProductName>MaycroftOL</ProductName>
+    <PublisherName />
+    <SupportUrl />
+    <FriendlyName>MaycroftOL</FriendlyName>
+    <OfficeApplicationDescription />
+    <LoadBehavior>3</LoadBehavior>
   </PropertyGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
       <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.VSTORuntime.4.0">
       <Visible>False</Visible>
@@ -199,9 +222,9 @@
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="Template.docx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Content Include="Template.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="ThisAddIn.Designer.xml">
       <DependentUpon>ThisAddIn.cs</DependentUpon>
     </None>
@@ -267,8 +290,8 @@
     <VisualStudio>
       <FlavorProperties GUID="{BAA0C2D2-18E2-41B9-852F-F413020CAA33}">
         <ProjectProperties HostName="Outlook" HostPackage="{29A7B9D7-A7F1-4328-8EF0-6B2D1A56B2C1}" OfficeVersion="15.0" VstxVersion="4.0" ApplicationType="Outlook" Language="cs" TemplatesPath="" DebugInfoExeName="#Software\Microsoft\Office\15.0\Outlook\InstallRoot\Path#outlook.exe" AddItemTemplatesGuid="{A58A78EB-1C92-4DDD-80CF-E8BD872ABFC4}" />
-        <Host Name="Outlook" GeneratedCodeNamespace="MaycroftOL" IconIndex="0">
-          <HostItem Name="ThisAddIn" Code="ThisAddIn.cs" CanonicalName="AddIn" CanActivate="false" IconIndex="1" Blueprint="ThisAddIn.Designer.xml" GeneratedCode="ThisAddIn.Designer.cs" />
+        <Host Name="Outlook" GeneratedCodeNamespace="MaycroftOL" PublishedHash="69C324AB27932AA2FBF2B7EA72250886FF164DE6" IconIndex="0">
+          <HostItem Name="ThisAddIn" Code="ThisAddIn.cs" CanonicalName="AddIn" PublishedHash="76F61DE9A8A90ABC0313FF21BF6E48F5B9696E93" CanActivate="false" IconIndex="1" Blueprint="ThisAddIn.Designer.xml" GeneratedCode="ThisAddIn.Designer.cs" />
         </Host>
       </FlavorProperties>
     </VisualStudio>
