@@ -56,10 +56,12 @@
             // 
             // tbName
             // 
-            this.tbName.Location = new System.Drawing.Point(171, 34);
+            this.tbName.Location = new System.Drawing.Point(123, 33);
             this.tbName.Name = "tbName";
             this.tbName.Size = new System.Drawing.Size(184, 20);
-            this.tbName.TabIndex = 1;
+            this.tbName.TabIndex = 0;
+            this.tbName.TextChanged += new System.EventHandler(this.tbName_TextChanged);
+            this.tbName.Leave += new System.EventHandler(this.tbName_TextChanged);
             // 
             // label2
             // 
@@ -73,7 +75,7 @@
             // 
             // tbTitle
             // 
-            this.tbTitle.Location = new System.Drawing.Point(171, 61);
+            this.tbTitle.Location = new System.Drawing.Point(123, 60);
             this.tbTitle.Name = "tbTitle";
             this.tbTitle.Size = new System.Drawing.Size(184, 20);
             this.tbTitle.TabIndex = 1;
@@ -90,10 +92,10 @@
             // 
             // tbAddress
             // 
-            this.tbAddress.Location = new System.Drawing.Point(171, 87);
+            this.tbAddress.Location = new System.Drawing.Point(123, 86);
             this.tbAddress.Name = "tbAddress";
             this.tbAddress.Size = new System.Drawing.Size(184, 20);
-            this.tbAddress.TabIndex = 1;
+            this.tbAddress.TabIndex = 2;
             // 
             // label4
             // 
@@ -107,10 +109,10 @@
             // 
             // tbPOBox
             // 
-            this.tbPOBox.Location = new System.Drawing.Point(171, 113);
+            this.tbPOBox.Location = new System.Drawing.Point(123, 112);
             this.tbPOBox.Name = "tbPOBox";
             this.tbPOBox.Size = new System.Drawing.Size(184, 20);
-            this.tbPOBox.TabIndex = 1;
+            this.tbPOBox.TabIndex = 3;
             // 
             // label5
             // 
@@ -124,10 +126,10 @@
             // 
             // tbPhone
             // 
-            this.tbPhone.Location = new System.Drawing.Point(171, 139);
+            this.tbPhone.Location = new System.Drawing.Point(123, 138);
             this.tbPhone.Name = "tbPhone";
             this.tbPhone.Size = new System.Drawing.Size(184, 20);
-            this.tbPhone.TabIndex = 1;
+            this.tbPhone.TabIndex = 4;
             // 
             // label6
             // 
@@ -141,35 +143,40 @@
             // 
             // tbEmail
             // 
-            this.tbEmail.Location = new System.Drawing.Point(171, 165);
+            this.tbEmail.Location = new System.Drawing.Point(123, 164);
             this.tbEmail.Name = "tbEmail";
             this.tbEmail.Size = new System.Drawing.Size(184, 20);
-            this.tbEmail.TabIndex = 1;
+            this.tbEmail.TabIndex = 5;
+            this.tbEmail.Leave += new System.EventHandler(this.tbEmail_Leave);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(171, 203);
+            this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button1.Location = new System.Drawing.Point(123, 202);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 2;
+            this.button1.TabIndex = 6;
             this.button1.Text = "Cancel";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(278, 203);
+            this.button2.Location = new System.Drawing.Point(230, 202);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 2;
+            this.button2.TabIndex = 7;
             this.button2.Text = "OK";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // Form1
             // 
+            this.AcceptButton = this.button2;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(365, 238);
+            this.CancelButton = this.button1;
+            this.ClientSize = new System.Drawing.Size(333, 242);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.tbEmail);
@@ -184,9 +191,15 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.tbName);
             this.Controls.Add(this.label1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Signature Setting";
+            this.TopMost = true;
             this.ResumeLayout(false);
             this.PerformLayout();
 
