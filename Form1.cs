@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -41,12 +37,21 @@ namespace MaycroftOL
                 object oFilePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase) + "\\Template.docx";
                 Word.Document TemplateDocu = WdTemplate.Documents.Open(ref oFilePath, ReadOnly: true, Visible: false);
                 //### replace key words here
-                string SigName = "AAAA";
-                System.Diagnostics.Debug.WriteLine(TemplateDocu.Name + " : " + TemplateDocu.Paragraphs[1].Range.Text);
+                string SigName = tbName.Text;
+                var Range = TemplateDocu.Content;
+                SetText(Range, "[name]", SigName);
+                SetText(Range, "[position]", tbTitle.Text);
+                SetText(Range, "[address]", tbAddress.Text);
+                SetText(Range, "[PO Box]", tbPOBox.Text);
+                SetText(Range, "[phone]", tbPhone.Text);
+                SetText(Range, "[mobile]", tbMobile.Text);
+                SetText(Range, "[fax]", tbFax.Text);
+                SetText(Range, "[email]", tbEmail.Text);
                 var SigEntry = oSignatureEntry.Add(SigName, TemplateDocu.Content);
                 oSignatureObject.NewMessageSignature =SigName;
                 oSignatureObject.ReplyMessageSignature =SigName;
                 TemplateDocu.Close(SaveChanges: false);
+                MessageBox.Show("Signature \"" + SigName + "\" created successfully!");
             }
             catch(Exception ex)
             {
@@ -90,6 +95,26 @@ namespace MaycroftOL
                 return add.Address == s;
             }
             catch { return false; }
+        }
+
+        int SetText(Word.Range rg, string foo, string bar)
+        {
+            rg.Find.ClearAllFuzzyOptions();
+            rg.Find.ClearFormatting();
+            rg.Find.Wrap = Word.WdFindWrap.wdFindStop;
+            rg.Find.Forward = true;
+            rg.Find.MatchWholeWord = true;
+            rg.Find.Text = foo;
+            rg.Find.Replacement.Text = bar;
+            rg.Find.Execute(Replace: Word.WdReplace.wdReplaceAll);
+            if (rg.Find.Found)
+            {
+                return 1;
+            }
+            else
+            {
+                return -1;
+            }
         }
     }
 }
