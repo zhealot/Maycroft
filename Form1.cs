@@ -22,6 +22,12 @@ namespace MaycroftOL
                 tbEmail.Text = CurUsr.AddressEntry.GetExchangeUser().PrimarySmtpAddress;
             }
             tbName.Text = CurUsr.Name;
+            cbAddress.Items.Clear();
+            cbPOBox.Items.Clear();
+            cbAddress.Items.Add("address test string 1");
+            cbAddress.Items.Add("test address 2");
+            cbPOBox.Items.Add("po box test1");
+            cbPOBox.Items.Add("Po box 2222");
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -41,12 +47,26 @@ namespace MaycroftOL
                 var Range = TemplateDocu.Content;
                 SetText(Range, "[name]", SigName);
                 SetText(Range, "[position]", tbTitle.Text);
-                SetText(Range, "[address]", tbAddress.Text);
-                SetText(Range, "[PO Box]", tbPOBox.Text);
+                SetText(Range, "[address]", cbAddress.Text);
+                SetText(Range, "[PO Box]", cbPOBox.Text);
                 SetText(Range, "[phone]", tbPhone.Text);
                 SetText(Range, "[mobile]", tbMobile.Text);
                 SetText(Range, "[fax]", tbFax.Text);
                 SetText(Range, "[email]", tbEmail.Text);
+                if (!chkLinkedIn.Checked)
+                {
+                    var rg = TemplateDocu.Content;
+                    rg.Find.ClearAllFuzzyOptions();
+                    rg.Find.ClearFormatting();
+                    rg.Find.Wrap = Word.WdFindWrap.wdFindStop;
+                    rg.Find.Text = "Follow us on LinkedIn";
+                    rg.Find.Execute();
+                    if (rg.Find.Found)
+                    {
+                        rg.SetRange(rg.Start - 1, rg.End + 2);
+                        rg.Delete();
+                    }
+                }
                 var SigEntry = oSignatureEntry.Add(SigName, TemplateDocu.Content);
                 oSignatureObject.NewMessageSignature =SigName;
                 oSignatureObject.ReplyMessageSignature =SigName;
@@ -57,7 +77,7 @@ namespace MaycroftOL
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
             }
-            WdTemplate.Quit();
+            WdTemplate.Quit(SaveChanges: false);
             //if (WdTemplate != null)
             //    System.Runtime.InteropServices.Marshal.ReleaseComObject(WdTemplate);
             GC.Collect();
