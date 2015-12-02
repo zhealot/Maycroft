@@ -17,7 +17,8 @@ namespace MaycroftOL
         {
             Form1 SetupForm = new Form1();
             SetupForm.Show();
-            SetupForm.Controls.Find("tbName", true)[0].Focus();
+            if (SetupForm.Controls.Find("tbName", true).Count() > 0)
+                SetupForm.Controls.Find("tbName", true)[0].Focus();
         }
     }
 }
