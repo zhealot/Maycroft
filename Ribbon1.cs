@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.Office.Tools.Ribbon;
+using System.Windows.Forms;
 
 namespace MaycroftOL
 {
@@ -19,6 +18,26 @@ namespace MaycroftOL
             SetupForm.Show();
             if (SetupForm.Controls.Find("tbName", true).Count() > 0)
                 SetupForm.Controls.Find("tbName", true)[0].Focus();
+        }
+
+        private void btnCopyHTML_Click(object sender, RibbonControlEventArgs e)
+        {
+            try
+            {
+                var ol = Globals.ThisAddIn.Application;
+                var NewMail = (Microsoft.Office.Interop.Outlook.MailItem)(ol.CreateItem(Microsoft.Office.Interop.Outlook.OlItemType.olMailItem));
+                NewMail.Display(NewMail);
+                var htmlbody = NewMail.HTMLBody;
+                NewMail.Delete();
+                htmlbody.Trim();
+                Clipboard.SetText(htmlbody.ToString());
+                MessageBox.Show("Signature HTML code copied to clipboard.");
+            }
+            catch(Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                MessageBox.Show("Failed to copy HTML code " + Environment.NewLine + ex.Message);
+            }
         }
     }
 }

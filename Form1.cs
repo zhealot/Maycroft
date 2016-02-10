@@ -63,23 +63,22 @@ namespace MaycroftOL
                     rg.Find.Execute();
                     if (rg.Find.Found)
                     {
-                        rg.SetRange(rg.Start - 1, rg.End + 2);
+                        //rg.SetRange(rg.Start - 1, rg.End + 2);
                         rg.Delete();
                     }
                 }
                 var SigEntry = oSignatureEntry.Add(SigName, TemplateDocu.Content);
-                oSignatureObject.NewMessageSignature =SigName;
-                oSignatureObject.ReplyMessageSignature =SigName;
+                oSignatureObject.NewMessageSignature = SigName;
+                oSignatureObject.ReplyMessageSignature = SigName;
                 TemplateDocu.Close(SaveChanges: false);
                 MessageBox.Show("Signature \"" + SigName + "\" created successfully!");
             }
             catch(Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
+                MessageBox.Show("Failed to create signature: " + Environment.NewLine + ex.Message);
             }
             WdTemplate.Quit(SaveChanges: false);
-            //if (WdTemplate != null)
-            //    System.Runtime.InteropServices.Marshal.ReleaseComObject(WdTemplate);
             GC.Collect();
         }
 
