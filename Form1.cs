@@ -24,9 +24,9 @@ namespace MaycroftOL
             tbName.Text = CurUsr.Name;
             cbAddress.Items.Clear();
             cbPOBox.Items.Clear();
-            cbAddress.Items.Add("address test string 1");
+            cbAddress.Items.Add("14A Gregory Street, Naenae");
             cbAddress.Items.Add("test address 2");
-            cbPOBox.Items.Add("po box test1");
+            cbPOBox.Items.Add("PO Box 30583 Lower Hutt");
             cbPOBox.Items.Add("Po box 2222");
         }
 
@@ -45,33 +45,48 @@ namespace MaycroftOL
                 //### replace key words here
                 string SigName = tbName.Text;
                 var Range = TemplateDocu.Content;
-                SetText(Range, "[name]", SigName);
-                SetText(Range, "[position]", tbTitle.Text);
+                SetText(Range, "[name]", SigName.ToUpper());
+                SetText(Range, "[position]", tbTitle.Text.ToUpper());
                 SetText(Range, "[address]", cbAddress.Text);
                 SetText(Range, "[PO Box]", cbPOBox.Text);
                 SetText(Range, "[phone]", tbPhone.Text);
                 SetText(Range, "[mobile]", tbMobile.Text);
                 SetText(Range, "[fax]", tbFax.Text);
                 SetText(Range, "[email]", tbEmail.Text);
-                if (!chkLinkedIn.Checked)
-                {
-                    var rg = TemplateDocu.Content;
-                    rg.Find.ClearAllFuzzyOptions();
-                    rg.Find.ClearFormatting();
-                    rg.Find.Wrap = Word.WdFindWrap.wdFindStop;
-                    rg.Find.Text = "Follow us on LinkedIn";
-                    rg.Find.Execute();
-                    if (rg.Find.Found)
-                    {
-                        //rg.SetRange(rg.Start - 1, rg.End + 2);
-                        rg.Delete();
-                    }
-                }
+                //if (!chkLinkedIn.Checked)
+                //{
+                //    var rg = TemplateDocu.Content;
+                //    rg.Find.ClearAllFuzzyOptions();
+                //    rg.Find.ClearFormatting();
+                //    rg.Find.Wrap = Word.WdFindWrap.wdFindStop;
+                //    rg.Find.Text = "Follow us on LinkedIn";
+                //    rg.Find.Execute();
+                //    if (rg.Find.Found)
+                //    {
+                //        //rg.SetRange(rg.Start - 1, rg.End + 2);
+                //        rg.Delete();
+                //    }
+                //}
                 var SigEntry = oSignatureEntry.Add(SigName, TemplateDocu.Content);
                 oSignatureObject.NewMessageSignature = SigName;
-                oSignatureObject.ReplyMessageSignature = SigName;
+                //no last row for reply & forward mail
+                if (TemplateDocu.Content.Tables.Count > 0)
+                {
+                    var tb = TemplateDocu.Content.Tables[1];
+                    int iLastRow = tb.Rows.Count;
+                    for(int i = tb.Range.Cells.Count; i > 1; i--)
+                    {
+                        if (tb.Range.Cells[i].RowIndex == iLastRow)
+                        {
+                            tb.Range.Cells[i].Delete();
+                        }
+                    }
+                }
+                oSignatureEntry.Add(SigName + "_reply", TemplateDocu.Content);
+                oSignatureObject.ReplyMessageSignature = SigName + "_reply";
                 TemplateDocu.Close(SaveChanges: false);
-                MessageBox.Show("Signature \"" + SigName + "\" created successfully!");
+                MessageBox.Show(this,"Signature \"" + SigName + "\" created successfully!");
+
             }
             catch(Exception ex)
             {
@@ -123,6 +138,7 @@ namespace MaycroftOL
             rg.Find.Wrap = Word.WdFindWrap.wdFindStop;
             rg.Find.Forward = true;
             rg.Find.MatchWholeWord = true;
+            rg.Find.MatchCase = true;
             rg.Find.Text = foo;
             rg.Find.Replacement.Text = bar;
             rg.Find.Execute(Replace: Word.WdReplace.wdReplaceAll);

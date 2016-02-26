@@ -15,7 +15,8 @@ namespace MaycroftOL
         private void button1_Click(object sender, RibbonControlEventArgs e)
         {
             Form1 SetupForm = new Form1();
-            SetupForm.Show();
+            SetupForm.ShowDialog();
+            //SetupForm.Show();
             if (SetupForm.Controls.Find("tbName", true).Count() > 0)
                 SetupForm.Controls.Find("tbName", true)[0].Focus();
         }
