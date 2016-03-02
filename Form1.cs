@@ -44,32 +44,23 @@ namespace MaycroftOL
                 Word.Document TemplateDocu = WdTemplate.Documents.Open(ref oFilePath, ReadOnly: true, Visible: false);
                 //### replace key words here
                 string SigName = tbName.Text;
-                var Range = TemplateDocu.Content;
-                SetText(Range, "[name]", SigName.ToUpper());
-                SetText(Range, "[position]", tbTitle.Text.ToUpper());
-                SetText(Range, "[address]", cbAddress.Text);
-                SetText(Range, "[PO Box]", cbPOBox.Text);
-                SetText(Range, "[phone]", tbPhone.Text);
-                SetText(Range, "[mobile]", tbMobile.Text);
-                SetText(Range, "[fax]", tbFax.Text);
-                SetText(Range, "[email]", tbEmail.Text);
-                //if (!chkLinkedIn.Checked)
-                //{
-                //    var rg = TemplateDocu.Content;
-                //    rg.Find.ClearAllFuzzyOptions();
-                //    rg.Find.ClearFormatting();
-                //    rg.Find.Wrap = Word.WdFindWrap.wdFindStop;
-                //    rg.Find.Text = "Follow us on LinkedIn";
-                //    rg.Find.Execute();
-                //    if (rg.Find.Found)
-                //    {
-                //        //rg.SetRange(rg.Start - 1, rg.End + 2);
-                //        rg.Delete();
-                //    }
-                //}
+                SetText(TemplateDocu, "[name]", SigName.ToUpper());
+                SetText(TemplateDocu, "[position]", tbTitle.Text.ToUpper());
+                SetText(TemplateDocu, "[Address:]", cbAddress.Text);
+                SetText(TemplateDocu, "[Postal Address:]", cbPOBox.Text);
+                SetText(TemplateDocu, "[DDI:]", tbPhone.Text);
+                SetText(TemplateDocu, "[Mob:]", tbMobile.Text);
+                SetText(TemplateDocu, "[Fax:]", tbFax.Text);
+                SetText(TemplateDocu, "[email]", tbEmail.Text);
+                foreach(Word.ContentControl cc in TemplateDocu.ContentControls)
+                {
+                    if (cc.LockContentControl)
+                        cc.LockContentControl = false;
+                    cc.Delete();
+                }
                 var SigEntry = oSignatureEntry.Add(SigName, TemplateDocu.Content);
                 oSignatureObject.NewMessageSignature = SigName;
-                //no last row for reply & forward mail
+                //no last row & column for reply & forward mail
                 if (TemplateDocu.Content.Tables.Count > 0)
                 {
                     var tb = TemplateDocu.Content.Tables[1];
@@ -81,12 +72,27 @@ namespace MaycroftOL
                             tb.Range.Cells[i].Delete();
                         }
                     }
+                    int iLastColumn = tb.Columns.Count;
+                    for(int j = tb.Range.Cells.Count; j > 1; j--)
+                    {
+                        if (tb.Range.Cells[j].ColumnIndex == iLastColumn)
+                        {
+                            tb.Range.Cells[j].Delete();
+                        }
+                    }
                 }
                 oSignatureEntry.Add(SigName + "_reply", TemplateDocu.Content);
                 oSignatureObject.ReplyMessageSignature = SigName + "_reply";
+                //set default compose & reply mail font
+                WdTemplate.Application.EmailOptions.ComposeStyle.Font.Name = "Arial";
+                WdTemplate.Application.EmailOptions.ComposeStyle.Font.Size = 13;
+                WdTemplate.Application.EmailOptions.ComposeStyle.Font.Color = Word.WdColor.wdColorGray80; //HEX:333333 - Oct 3355443 - RGB(51,51,51)
+                WdTemplate.Application.EmailOptions.ReplyStyle.Font.Name = "Arial";
+                WdTemplate.Application.EmailOptions.ReplyStyle.Font.Size = 13;
+                WdTemplate.Application.EmailOptions.ReplyStyle.Font.Color = Word.WdColor.wdColorGray80;
+
                 TemplateDocu.Close(SaveChanges: false);
                 MessageBox.Show(this,"Signature \"" + SigName + "\" created successfully!");
-
             }
             catch(Exception ex)
             {
@@ -131,25 +137,26 @@ namespace MaycroftOL
             catch { return false; }
         }
 
-        int SetText(Word.Range rg, string foo, string bar)
+        int SetText(Word.Document doc, string foo, string bar)
         {
-            rg.Find.ClearAllFuzzyOptions();
-            rg.Find.ClearFormatting();
-            rg.Find.Wrap = Word.WdFindWrap.wdFindStop;
-            rg.Find.Forward = true;
-            rg.Find.MatchWholeWord = true;
-            rg.Find.MatchCase = true;
-            rg.Find.Text = foo;
-            rg.Find.Replacement.Text = bar;
-            rg.Find.Execute(Replace: Word.WdReplace.wdReplaceAll);
-            if (rg.Find.Found)
+            Word.ContentControl cc;
+            if (doc.SelectContentControlsByTitle(foo).Count > 0)
             {
+                cc = doc.SelectContentControlsByTitle(foo)[1];
+                if (cc.LockContents)
+                    cc.LockContents = false;
+                cc.Range.Text = bar + (bar == "" ? "" : " ");
+                string sTmp = foo.Replace("[", "").Replace("]", "").Trim();
+                if (bar.Trim() == "" && doc.SelectContentControlsByTitle(sTmp).Count > 0)
+                {
+                    cc = doc.SelectContentControlsByTitle(sTmp)[1];
+                    if (cc.LockContents)
+                        cc.LockContents = false;
+                    cc.Range.Text = "";
+                }
                 return 1;
             }
-            else
-            {
-                return -1;
-            }
+            else return -1;
         }
     }
 }

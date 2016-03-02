@@ -61,7 +61,7 @@
             // 
             this.button1.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
             this.button1.Image = global::MaycroftOL.Properties.Resources.setting2;
-            this.button1.Label = "Setting";
+            this.button1.Label = "Settings";
             this.button1.Name = "button1";
             this.button1.ShowImage = true;
             this.button1.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button1_Click);
