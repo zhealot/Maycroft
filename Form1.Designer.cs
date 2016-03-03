@@ -37,7 +37,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.tbPhone = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.tbEmail = new System.Windows.Forms.TextBox();
+            this.tbSkype = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
@@ -127,17 +127,17 @@
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.Location = new System.Drawing.Point(20, 208);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(42, 16);
+            this.label6.Size = new System.Drawing.Size(47, 16);
             this.label6.TabIndex = 0;
-            this.label6.Text = "Email";
+            this.label6.Text = "Skype";
             // 
-            // tbEmail
+            // tbSkype
             // 
-            this.tbEmail.Location = new System.Drawing.Point(95, 208);
-            this.tbEmail.Name = "tbEmail";
-            this.tbEmail.Size = new System.Drawing.Size(184, 20);
-            this.tbEmail.TabIndex = 8;
-            this.tbEmail.Leave += new System.EventHandler(this.tbEmail_Leave);
+            this.tbSkype.Location = new System.Drawing.Point(95, 208);
+            this.tbSkype.Name = "tbSkype";
+            this.tbSkype.Size = new System.Drawing.Size(184, 20);
+            this.tbSkype.TabIndex = 8;
+            this.tbSkype.Leave += new System.EventHandler(this.tbEmail_Leave);
             // 
             // button1
             // 
@@ -222,7 +222,7 @@
             this.Controls.Add(this.cbAddress);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.tbEmail);
+            this.Controls.Add(this.tbSkype);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.tbFax);
             this.Controls.Add(this.label8);
@@ -261,7 +261,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox tbPhone;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox tbEmail;
+        private System.Windows.Forms.TextBox tbSkype;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label7;

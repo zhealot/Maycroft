@@ -16,10 +16,10 @@ namespace MaycroftOL
         {
             InitializeComponent();
             var CurUsr = Globals.ThisAddIn.Application.Session.CurrentUser;
-            tbEmail.Text = CurUsr.Address;
+            tbSkype.Text = CurUsr.Address;
             if (CurUsr.AddressEntry.Type == "EX")
             {
-                tbEmail.Text = CurUsr.AddressEntry.GetExchangeUser().PrimarySmtpAddress;
+                tbSkype.Text = CurUsr.AddressEntry.GetExchangeUser().PrimarySmtpAddress;
             }
             tbName.Text = CurUsr.Name;
             cbAddress.Items.Clear();
@@ -51,7 +51,7 @@ namespace MaycroftOL
                 SetText(TemplateDocu, "[DDI:]", tbPhone.Text);
                 SetText(TemplateDocu, "[Mob:]", tbMobile.Text);
                 SetText(TemplateDocu, "[Fax:]", tbFax.Text);
-                SetText(TemplateDocu, "[email]", tbEmail.Text);
+                SetText(TemplateDocu, "[Skype:]", tbSkype.Text);
                 foreach(Word.ContentControl cc in TemplateDocu.ContentControls)
                 {
                     if (cc.LockContentControl)
@@ -87,9 +87,11 @@ namespace MaycroftOL
                 WdTemplate.Application.EmailOptions.ComposeStyle.Font.Name = "Arial";
                 WdTemplate.Application.EmailOptions.ComposeStyle.Font.Size = 13;
                 WdTemplate.Application.EmailOptions.ComposeStyle.Font.Color = Word.WdColor.wdColorGray80; //HEX:333333 - Oct 3355443 - RGB(51,51,51)
+                WdTemplate.Application.EmailOptions.ComposeStyle.Font.Bold = 0;
                 WdTemplate.Application.EmailOptions.ReplyStyle.Font.Name = "Arial";
                 WdTemplate.Application.EmailOptions.ReplyStyle.Font.Size = 13;
                 WdTemplate.Application.EmailOptions.ReplyStyle.Font.Color = Word.WdColor.wdColorGray80;
+                WdTemplate.Application.EmailOptions.ReplyStyle.Font.Bold = 0;
 
                 TemplateDocu.Close(SaveChanges: false);
                 MessageBox.Show(this,"Signature \"" + SigName + "\" created successfully!");
@@ -120,9 +122,9 @@ namespace MaycroftOL
 
         private void tbEmail_Leave(object sender, EventArgs e)
         {
-            if (!IsEmail(tbEmail.Text))
+            if (!IsEmail(tbSkype.Text))
             {
-                tbEmail.Focus();
+                tbSkype.Focus();
                 MessageBox.Show("Email address no valid.");
             }
         }
