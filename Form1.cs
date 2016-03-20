@@ -21,6 +21,7 @@ namespace MaycroftOL
             {
                 tbSkype.Text = CurUsr.AddressEntry.GetExchangeUser().PrimarySmtpAddress;
             }
+            cbProject.Checked = true;
             tbName.Text = CurUsr.Name;
             cbAddress.Items.Clear();
             cbPOBox.Items.Clear();
@@ -52,7 +53,29 @@ namespace MaycroftOL
                 SetText(TemplateDocu, "[Mob:]", tbMobile.Text);
                 SetText(TemplateDocu, "[Fax:]", tbFax.Text);
                 SetText(TemplateDocu, "[Skype:]", tbSkype.Text);
-                foreach(Word.ContentControl cc in TemplateDocu.ContentControls)
+                //replace 'link to project' hyperlink
+                if (TemplateDocu.Hyperlinks.Count > 0)
+                {
+                    for (int i = 1; i <= TemplateDocu.Hyperlinks.Count; i++)
+                    {
+                        if (TemplateDocu.Hyperlinks[i].Address == "http://maycroftlatest/")
+                        {
+                            if (cbProject.Checked && tbProject.Text.Trim().Length > 0)
+                            {
+                                TemplateDocu.Hyperlinks[i].Address = tbProject.Text;
+                            }
+                            else if (cbProject.Checked == false || tbProject.Text.Trim().Length == 0)
+                            {
+                                if (TemplateDocu.Hyperlinks[i].Range.Cells.Count > 0)
+                                {
+                                    TemplateDocu.Hyperlinks[i].Range.Cells[1].Range.Text = "";  //delete screen text if no URL
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                foreach (Word.ContentControl cc in TemplateDocu.ContentControls)
                 {
                     if (cc.LockContentControl)
                         cc.LockContentControl = false;
@@ -85,11 +108,11 @@ namespace MaycroftOL
                 oSignatureObject.ReplyMessageSignature = SigName + "_reply";
                 //set default compose & reply mail font
                 WdTemplate.Application.EmailOptions.ComposeStyle.Font.Name = "Arial";
-                WdTemplate.Application.EmailOptions.ComposeStyle.Font.Size = 13;
+                WdTemplate.Application.EmailOptions.ComposeStyle.Font.Size = 11;
                 WdTemplate.Application.EmailOptions.ComposeStyle.Font.Color = Word.WdColor.wdColorGray80; //HEX:333333 - Oct 3355443 - RGB(51,51,51)
                 WdTemplate.Application.EmailOptions.ComposeStyle.Font.Bold = 0;
                 WdTemplate.Application.EmailOptions.ReplyStyle.Font.Name = "Arial";
-                WdTemplate.Application.EmailOptions.ReplyStyle.Font.Size = 13;
+                WdTemplate.Application.EmailOptions.ReplyStyle.Font.Size = 11;
                 WdTemplate.Application.EmailOptions.ReplyStyle.Font.Color = Word.WdColor.wdColorGray80;
                 WdTemplate.Application.EmailOptions.ReplyStyle.Font.Bold = 0;
 
@@ -122,11 +145,11 @@ namespace MaycroftOL
 
         private void tbEmail_Leave(object sender, EventArgs e)
         {
-            if (!IsEmail(tbSkype.Text))
-            {
-                tbSkype.Focus();
-                MessageBox.Show("Email address no valid.");
-            }
+            //if (!IsEmail(tbSkype.Text))
+            //{
+            //    tbSkype.Focus();
+            //    MessageBox.Show("Email address no valid.");
+            //}
         }
 
         bool IsEmail(string s)
@@ -159,6 +182,11 @@ namespace MaycroftOL
                 return 1;
             }
             else return -1;
+        }
+
+        private void cbProject_CheckedChanged(object sender, EventArgs e)
+        {
+            tbProject.Enabled = cbProject.Checked;
         }
     }
 }

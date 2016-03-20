@@ -46,6 +46,8 @@
             this.tbFax = new System.Windows.Forms.TextBox();
             this.cbAddress = new System.Windows.Forms.ComboBox();
             this.cbPOBox = new System.Windows.Forms.ComboBox();
+            this.cbProject = new System.Windows.Forms.CheckBox();
+            this.tbProject = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -119,7 +121,7 @@
             this.tbPhone.Location = new System.Drawing.Point(95, 154);
             this.tbPhone.Name = "tbPhone";
             this.tbPhone.Size = new System.Drawing.Size(184, 20);
-            this.tbPhone.TabIndex = 6;
+            this.tbPhone.TabIndex = 5;
             // 
             // label6
             // 
@@ -136,13 +138,13 @@
             this.tbSkype.Location = new System.Drawing.Point(95, 208);
             this.tbSkype.Name = "tbSkype";
             this.tbSkype.Size = new System.Drawing.Size(184, 20);
-            this.tbSkype.TabIndex = 8;
+            this.tbSkype.TabIndex = 7;
             this.tbSkype.Leave += new System.EventHandler(this.tbEmail_Leave);
             // 
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button1.Location = new System.Drawing.Point(97, 245);
+            this.button1.Location = new System.Drawing.Point(204, 276);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 10;
@@ -152,10 +154,10 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(204, 245);
+            this.button2.Location = new System.Drawing.Point(95, 276);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 11;
+            this.button2.TabIndex = 9;
             this.button2.Text = "OK";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
@@ -175,7 +177,7 @@
             this.tbMobile.Location = new System.Drawing.Point(95, 127);
             this.tbMobile.Name = "tbMobile";
             this.tbMobile.Size = new System.Drawing.Size(184, 20);
-            this.tbMobile.TabIndex = 5;
+            this.tbMobile.TabIndex = 4;
             // 
             // label8
             // 
@@ -192,7 +194,7 @@
             this.tbFax.Location = new System.Drawing.Point(95, 181);
             this.tbFax.Name = "tbFax";
             this.tbFax.Size = new System.Drawing.Size(184, 20);
-            this.tbFax.TabIndex = 7;
+            this.tbFax.TabIndex = 6;
             // 
             // cbAddress
             // 
@@ -210,6 +212,26 @@
             this.cbPOBox.Size = new System.Drawing.Size(184, 21);
             this.cbPOBox.TabIndex = 3;
             // 
+            // cbProject
+            // 
+            this.cbProject.AutoSize = true;
+            this.cbProject.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
+            this.cbProject.Location = new System.Drawing.Point(23, 234);
+            this.cbProject.Name = "cbProject";
+            this.cbProject.Size = new System.Drawing.Size(69, 20);
+            this.cbProject.TabIndex = 12;
+            this.cbProject.Text = "Project";
+            this.cbProject.UseVisualStyleBackColor = true;
+            this.cbProject.CheckedChanged += new System.EventHandler(this.cbProject_CheckedChanged);
+            // 
+            // tbProject
+            // 
+            this.tbProject.Location = new System.Drawing.Point(95, 234);
+            this.tbProject.Name = "tbProject";
+            this.tbProject.Size = new System.Drawing.Size(184, 20);
+            this.tbProject.TabIndex = 8;
+            this.tbProject.Leave += new System.EventHandler(this.tbEmail_Leave);
+            // 
             // Form1
             // 
             this.AcceptButton = this.button2;
@@ -217,11 +239,13 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
             this.CancelButton = this.button1;
-            this.ClientSize = new System.Drawing.Size(290, 276);
+            this.ClientSize = new System.Drawing.Size(288, 311);
+            this.Controls.Add(this.cbProject);
             this.Controls.Add(this.cbPOBox);
             this.Controls.Add(this.cbAddress);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
+            this.Controls.Add(this.tbProject);
             this.Controls.Add(this.tbSkype);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.tbFax);
@@ -270,5 +294,7 @@
         private System.Windows.Forms.TextBox tbFax;
         private System.Windows.Forms.ComboBox cbAddress;
         private System.Windows.Forms.ComboBox cbPOBox;
+        private System.Windows.Forms.CheckBox cbProject;
+        private System.Windows.Forms.TextBox tbProject;
     }
 }
