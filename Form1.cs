@@ -1,11 +1,7 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
-using Outlook = Microsoft.Office.Interop.Outlook;
 using Word = Microsoft.Office.Interop.Word;
 
 namespace MaycroftOL
@@ -15,20 +11,53 @@ namespace MaycroftOL
         public Form1()
         {
             InitializeComponent();
-            var CurUsr = Globals.ThisAddIn.Application.Session.CurrentUser;
-            tbSkype.Text = CurUsr.Address;
-            if (CurUsr.AddressEntry.Type == "EX")
-            {
-                tbSkype.Text = CurUsr.AddressEntry.GetExchangeUser().PrimarySmtpAddress;
-            }
-            cbProject.Checked = true;
-            tbName.Text = CurUsr.Name;
             cbAddress.Items.Clear();
             cbPOBox.Items.Clear();
             cbAddress.Items.Add("14A Gregory Street, Naenae");
             cbAddress.Items.Add("test address 2");
             cbPOBox.Items.Add("PO Box 30583 Lower Hutt");
             cbPOBox.Items.Add("Po box 2222");
+            Word.Application WdTemplate = new Word.Application();
+            WdTemplate.Visible = false;
+            try
+            {
+                object oFiePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase) + "\\Template.docx";
+                Word.Document doc = WdTemplate.Documents.Open(ref oFiePath, ReadOnly: true, Visible: false);
+                tbName.Text = ValueInTemplate(doc, "name");
+                tbTitle.Text = ValueInTemplate(doc, "title");
+                cbAddress.Text = ValueInTemplate(doc, "Address");
+                cbPOBox.Text = ValueInTemplate(doc, "Postal Address");
+                tbMobile.Text = ValueInTemplate(doc, "Mob");
+                tbPhone.Text = ValueInTemplate(doc, "DDI");
+                tbFax.Text = ValueInTemplate(doc, "Fax");
+                tbSkype.Text = ValueInTemplate(doc, "Skype");
+                tbProject.Text = "";
+                if (doc.Hyperlinks.Count > 0)
+                {
+                    for (int i = 1; i <= doc.Hyperlinks.Count; i++)
+                    {
+                        if (doc.Hyperlinks[i].TextToDisplay.ToUpper().IndexOf("VIEW FEATURE PROJECT") >= 0)
+                        {
+                            tbProject.Text = doc.Hyperlinks[i].Address.Trim();
+                            break;
+                        }
+                    }
+                }
+                doc.Close(SaveChanges: false);
+                WdTemplate.Quit();
+            }
+            catch(Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+            cbProject.Checked = true;
+            //var CurUsr = Globals.ThisAddIn.Application.Session.CurrentUser;
+            //tbSkype.Text = CurUsr.Address;
+            //tbName.Text = CurUsr.Name;
+            //if (CurUsr.AddressEntry.Type == "EX")
+            //{
+            //    tbSkype.Text = CurUsr.AddressEntry.GetExchangeUser().PrimarySmtpAddress;
+            //}
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -42,23 +71,23 @@ namespace MaycroftOL
             try
             {
                 object oFilePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase) + "\\Template.docx";
-                Word.Document TemplateDocu = WdTemplate.Documents.Open(ref oFilePath, ReadOnly: true, Visible: false);
+                Word.Document TemplateDocu = WdTemplate.Documents.Open(ref oFilePath, ReadOnly: false, Visible: false);
                 //### replace key words here
                 string SigName = tbName.Text;
-                SetText(TemplateDocu, "[name]", SigName.ToUpper());
-                SetText(TemplateDocu, "[position]", tbTitle.Text.ToUpper());
-                SetText(TemplateDocu, "[Address:]", cbAddress.Text);
-                SetText(TemplateDocu, "[Postal Address:]", cbPOBox.Text);
-                SetText(TemplateDocu, "[DDI:]", tbPhone.Text);
-                SetText(TemplateDocu, "[Mob:]", tbMobile.Text);
-                SetText(TemplateDocu, "[Fax:]", tbFax.Text);
-                SetText(TemplateDocu, "[Skype:]", tbSkype.Text);
+                SetText(TemplateDocu, "name", SigName.ToUpper());
+                SetText(TemplateDocu, "title", tbTitle.Text.ToUpper());
+                SetText(TemplateDocu, "Address", cbAddress.Text);
+                SetText(TemplateDocu, "Postal Address", cbPOBox.Text);
+                SetText(TemplateDocu, "DDI", tbPhone.Text);
+                SetText(TemplateDocu, "Mob", tbMobile.Text);
+                SetText(TemplateDocu, "Fax", tbFax.Text);
+                SetText(TemplateDocu, "Skype", tbSkype.Text);
                 //replace 'link to project' hyperlink
                 if (TemplateDocu.Hyperlinks.Count > 0)
                 {
                     for (int i = 1; i <= TemplateDocu.Hyperlinks.Count; i++)
                     {
-                        if (TemplateDocu.Hyperlinks[i].Address == "http://maycroftlatest/")
+                        if (TemplateDocu.Hyperlinks[i].TextToDisplay.ToUpper().Trim().IndexOf("VIEW FEATURE PROJECT") >= 0)
                         {
                             if (cbProject.Checked && tbProject.Text.Trim().Length > 0)
                             {
@@ -75,6 +104,9 @@ namespace MaycroftOL
                         }
                     }
                 }
+                //save changes back to template
+                TemplateDocu.Save();
+
                 foreach (Word.ContentControl cc in TemplateDocu.ContentControls)
                 {
                     if (cc.LockContentControl)
@@ -116,7 +148,7 @@ namespace MaycroftOL
                 WdTemplate.Application.EmailOptions.ReplyStyle.Font.Color = Word.WdColor.wdColorGray80;
                 WdTemplate.Application.EmailOptions.ReplyStyle.Font.Bold = 0;
 
-                TemplateDocu.Close(SaveChanges: false);
+                TemplateDocu.Close(SaveChanges:false);
                 MessageBox.Show(this,"Signature \"" + SigName + "\" created successfully!");
             }
             catch(Exception ex)
@@ -162,19 +194,18 @@ namespace MaycroftOL
             catch { return false; }
         }
 
-        int SetText(Word.Document doc, string foo, string bar)
+        int SetText(Word.Document doc, string CCTitle, string CCText)
         {
             Word.ContentControl cc;
-            if (doc.SelectContentControlsByTitle(foo).Count > 0)
+            if (doc.SelectContentControlsByTitle(CCTitle).Count > 0)
             {
-                cc = doc.SelectContentControlsByTitle(foo)[1];
+                cc = doc.SelectContentControlsByTitle(CCTitle)[1];
                 if (cc.LockContents)
                     cc.LockContents = false;
-                cc.Range.Text = bar + (bar == "" ? "" : " ");
-                string sTmp = foo.Replace("[", "").Replace("]", "").Trim();
-                if (bar.Trim() == "" && doc.SelectContentControlsByTitle(sTmp).Count > 0)
+                cc.Range.Text = CCText.Trim() + " ";
+                if (CCText.Trim() == "" && doc.SelectContentControlsByTitle(CCTitle +"_T").Count > 0)
                 {
-                    cc = doc.SelectContentControlsByTitle(sTmp)[1];
+                    cc = doc.SelectContentControlsByTitle(CCTitle+"_T")[1];
                     if (cc.LockContents)
                         cc.LockContents = false;
                     cc.Range.Text = "";
@@ -182,6 +213,17 @@ namespace MaycroftOL
                 return 1;
             }
             else return -1;
+        }
+
+        string ValueInTemplate(Word.Document doc, string CCTitle)
+        {
+            if (doc.SelectContentControlsByTitle(CCTitle).Count > 0)
+            {
+                Word.ContentControl cc;
+                cc = doc.SelectContentControlsByTitle(CCTitle)[1];
+                return cc.Range.Text;
+            }
+            else return "";
         }
 
         private void cbProject_CheckedChanged(object sender, EventArgs e)
