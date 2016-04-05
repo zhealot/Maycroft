@@ -93,12 +93,9 @@ namespace MaycroftOL
                             {
                                 TemplateDocu.Hyperlinks[i].Address = tbProject.Text;
                             }
-                            else if (cbProject.Checked == false || tbProject.Text.Trim().Length == 0)
+                            else 
                             {
-                                if (TemplateDocu.Hyperlinks[i].Range.Cells.Count > 0)
-                                {
-                                    TemplateDocu.Hyperlinks[i].Range.Cells[1].Range.Text = "";  //delete screen text if no URL
-                                }
+                                TemplateDocu.Hyperlinks[i].TextToDisplay = " ";
                             }
                             break;
                         }
