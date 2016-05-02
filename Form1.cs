@@ -110,7 +110,7 @@ namespace MaycroftOL
                         cc.LockContentControl = false;
                     cc.Delete();
                 }
-                var SigEntry = oSignatureEntry.Add(SigName, TemplateDocu.Content);
+                var SigEntry = oSignatureEntry.Add(SigName, TemplateDocu.Tables[1].Range);
                 oSignatureObject.NewMessageSignature = SigName;
                 //no last row & column for reply & forward mail
                 if (TemplateDocu.Content.Tables.Count > 0)
@@ -133,7 +133,7 @@ namespace MaycroftOL
                         }
                     }
                 }
-                oSignatureEntry.Add(SigName + "_reply", TemplateDocu.Content);
+                oSignatureEntry.Add(SigName + "_reply", TemplateDocu.Tables[1].Range);
                 oSignatureObject.ReplyMessageSignature = SigName + "_reply";
                 //set default compose & reply mail font
                 WdTemplate.Application.EmailOptions.ComposeStyle.Font.Name = "Arial";
