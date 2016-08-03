@@ -112,14 +112,14 @@ namespace MaycroftOL
                 }
                 var SigEntry = oSignatureEntry.Add(SigName, TemplateDocu.Tables[1].Range);
                 oSignatureObject.NewMessageSignature = SigName;
-                //no last row & column for reply & forward mail
+                //no last two rows & column for reply & forward mail
                 if (TemplateDocu.Content.Tables.Count > 0)
                 {
                     var tb = TemplateDocu.Content.Tables[1];
                     int iLastRow = tb.Rows.Count;
                     for(int i = tb.Range.Cells.Count; i > 1; i--)
                     {
-                        if (tb.Range.Cells[i].RowIndex == iLastRow)
+                        if (tb.Range.Cells[i].RowIndex >= iLastRow - 1)
                         {
                             tb.Range.Cells[i].Delete();
                         }
@@ -151,9 +151,14 @@ namespace MaycroftOL
             catch(Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
+                if (WdTemplate.Documents.Count > 0)
+                {
+                    WdTemplate.Documents[1].Close(SaveChanges: false);
+                }
                 MessageBox.Show("Failed to create signature: " + Environment.NewLine + ex.Message);
             }
             WdTemplate.Quit(SaveChanges: false);
+            WdTemplate = null;
             GC.Collect();
         }
 
