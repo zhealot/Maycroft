@@ -14,9 +14,8 @@ namespace MaycroftOL
             cbAddress.Items.Clear();
             cbPOBox.Items.Clear();
             cbAddress.Items.Add("14A Gregory Street, Naenae");
-            cbAddress.Items.Add("test address 2");
+            cbAddress.Items.Add("6 Roy St, Palmerston North");
             cbPOBox.Items.Add("PO Box 30583 Lower Hutt");
-            cbPOBox.Items.Add("Po box 2222");
             Word.Application WdTemplate = new Word.Application();
             WdTemplate.Visible = false;
             try
