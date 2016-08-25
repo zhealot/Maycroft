@@ -198,22 +198,50 @@ namespace MaycroftOL
         int SetText(Word.Document doc, string CCTitle, string CCText)
         {
             Word.ContentControl cc;
-            if (doc.SelectContentControlsByTitle(CCTitle).Count > 0)
+            if (doc.SelectContentControlsByTitle(CCTitle).Count > 0 )
             {
                 cc = doc.SelectContentControlsByTitle(CCTitle)[1];
-                if (cc.LockContents)
-                    cc.LockContents = false;
-                cc.Range.Text = CCText.Trim() + " ";
-                if (CCText.Trim() == "" && doc.SelectContentControlsByTitle(CCTitle +"_T").Count > 0)
+                if (CCText.Trim() == string.Empty)
                 {
-                    cc = doc.SelectContentControlsByTitle(CCTitle+"_T")[1];
+                    cc.Range.Text = "";
+                    cc.Range.Font.Hidden = 1;                    
+                }
+                else
+                {
                     if (cc.LockContents)
                         cc.LockContents = false;
+                    cc.Range.Font.Hidden = 0;
+                    cc.Range.Text = CCText.Trim() + " ";
+                }
+            }
+            if (doc.SelectContentControlsByTitle(CCTitle + "_T").Count > 0)
+            {
+                cc = doc.SelectContentControlsByTitle(CCTitle + "_T")[1];
+                if (cc.LockContents)
+                    cc.LockContents = false;
+                //hide cc's text if there's no content for this cc
+                string ccTmp = string.Empty;
+                if (CCText.Trim() == "")
+                {
                     cc.Range.Text = "";
+                    cc.Range.Font.Hidden = 1;
+                }
+                else
+                {
+                    if (CCTitle == "name" || CCTitle == "title")
+                    {
+                        ccTmp = CCTitle;
+                    }
+                    else
+                    {
+                        ccTmp = CCTitle + ": ";
+                    }
+                    cc.Range.Font.Hidden = 0;
+                    cc.Range.Text = ccTmp;
                 }
                 return 1;
             }
-            else return -1;
+            return -1;
         }
 
         string ValueInTemplate(Word.Document doc, string CCTitle)
@@ -222,7 +250,14 @@ namespace MaycroftOL
             {
                 Word.ContentControl cc;
                 cc = doc.SelectContentControlsByTitle(CCTitle)[1];
-                return cc.Range.Text;
+                if (cc.Range.Text == null)
+                {
+                    return "";
+                }
+                else
+                {
+                    return cc.Range.Text.Trim();
+                }
             }
             else return "";
         }

@@ -58,13 +58,13 @@ namespace MaycroftOL
                     appWord.Quit(SaveChanges: false);
                     string sAppDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\microsoft\\signatures";
                     string sSigFile = sAppDataDir + "\\" + sSigName + "_reply.htm";
-                    if (File.Exists(sSigFile))
+                    try
                     {
                         StreamReader sr = new StreamReader(sSigFile, System.Text.Encoding.Default);
                         Clipboard.SetText(sr.ReadToEnd());
                         MessageBox.Show("Reply signature HTML code copied to clipboard");
                     }
-                    else
+                    catch
                     {
                         MessageBox.Show("Signature file not found");
                     }
