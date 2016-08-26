@@ -32,7 +32,7 @@ namespace MaycroftOL
                 var htmlbody = NewMail.HTMLBody;
                 NewMail.Delete();
                 htmlbody.Trim();
-                Clipboard.SetText(htmlbody.ToString());
+                Clipboard.SetText(ParseHTML(htmlbody.ToString()));
                 MessageBox.Show("Signature HTML code copied to clipboard.");
             }
             catch (Exception ex)
@@ -61,7 +61,8 @@ namespace MaycroftOL
                     try
                     {
                         StreamReader sr = new StreamReader(sSigFile, System.Text.Encoding.Default);
-                        Clipboard.SetText(sr.ReadToEnd());
+                        Clipboard.SetText(ParseHTML(sr.ReadToEnd()));
+                        //Clipboard.SetText(sr.ReadToEnd());
                         MessageBox.Show("Reply signature HTML code copied to clipboard");
                     }
                     catch
@@ -80,7 +81,11 @@ namespace MaycroftOL
             {
                 MessageBox.Show(ex.Message);
             }
+        }
 
+        public static string ParseHTML(string sHTML)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(sHTML, "<!--.*?-->", string.Empty, System.Text.RegularExpressions.RegexOptions.Singleline);
         }
     }
 }
