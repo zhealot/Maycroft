@@ -83,6 +83,11 @@ namespace MaycroftOL
             }
         }
 
+        /// <summary>
+        /// delete comments in html by regular expression
+        /// </summary>
+        /// <param name="sHTML">input html string</param>
+        /// <returns></returns>
         public static string ParseHTML(string sHTML)
         {
             return System.Text.RegularExpressions.Regex.Replace(sHTML, "<!--.*?-->", string.Empty, System.Text.RegularExpressions.RegexOptions.Singleline);
