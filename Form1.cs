@@ -13,9 +13,12 @@ namespace MaycroftOL
             InitializeComponent();
             cbAddress.Items.Clear();
             cbPOBox.Items.Clear();
+            cbAddress.Items.Add("Fidelity Life Building, Level 2, 1 Market Grove, Lower Hutt 5010");
             cbAddress.Items.Add("14A Gregory Street, Naenae");
             cbAddress.Items.Add("6 Roy St, Palmerston North");
+            cbAddress.SelectedIndex = 0;
             cbPOBox.Items.Add("PO Box 30583 Lower Hutt");
+            cbPOBox.SelectedIndex = 0;
             Word.Application WdTemplate = new Word.Application();
             WdTemplate.Visible = false;
             try
@@ -50,13 +53,13 @@ namespace MaycroftOL
                 System.Diagnostics.Debug.WriteLine(ex.Message);
             }
             cbProject.Checked = true;
-            //var CurUsr = Globals.ThisAddIn.Application.Session.CurrentUser;
-            //tbSkype.Text = CurUsr.Address;
-            //tbName.Text = CurUsr.Name;
-            //if (CurUsr.AddressEntry.Type == "EX")
-            //{
-            //    tbSkype.Text = CurUsr.AddressEntry.GetExchangeUser().PrimarySmtpAddress;
-            //}
+            var CurUsr = Globals.ThisAddIn.Application.Session.CurrentUser;
+            tbSkype.Text = CurUsr.Address;
+            tbName.Text = CurUsr.Name;
+            if (CurUsr.AddressEntry.Type == "EX")
+            {
+                tbSkype.Text = CurUsr.AddressEntry.GetExchangeUser().PrimarySmtpAddress;
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -81,7 +84,11 @@ namespace MaycroftOL
                 SetText(TemplateDocu, "Mob", tbMobile.Text);
                 SetText(TemplateDocu, "Fax", tbFax.Text);
                 SetText(TemplateDocu, "Skype", tbSkype.Text);
-                //replace 'link to project' hyperlink
+                //turn Skype to hyperlink
+                Word.Range rg = TemplateDocu.SelectContentControlsByTag("Skype")[1].Range;
+                Word.Hyperlink hl = TemplateDocu.Hyperlinks.Add(rg, "emailto:" + rg.Text);
+                //set hyperlink font
+                hl.Range.Font.Name = "Arial";
                 if (TemplateDocu.Hyperlinks.Count > 0)
                 {
                     for (int i = 1; i <= TemplateDocu.Hyperlinks.Count; i++)
@@ -111,27 +118,27 @@ namespace MaycroftOL
                 }
                 var SigEntry = oSignatureEntry.Add(SigName, TemplateDocu.Tables[1].Range);
                 oSignatureObject.NewMessageSignature = SigName;
-                //no last two rows & column for reply & forward mail
+                //no last two rows &column for reply & forward mail
                 if (TemplateDocu.Content.Tables.Count > 0)
-                {
-                    var tb = TemplateDocu.Content.Tables[1];
-                    int iLastRow = tb.Rows.Count;
-                    for(int i = tb.Range.Cells.Count; i > 1; i--)
                     {
-                        if (tb.Range.Cells[i].RowIndex >= iLastRow - 1)
+                        var tb = TemplateDocu.Content.Tables[1];
+                        int iLastRow = tb.Rows.Count;
+                        for (int i = tb.Range.Cells.Count; i > 1; i--)
                         {
-                            tb.Range.Cells[i].Delete();
+                            if (tb.Range.Cells[i].RowIndex >= iLastRow - 1)
+                            {
+                                tb.Range.Cells[i].Delete();
+                            }
+                        }
+                        int iLastColumn = tb.Columns.Count;
+                        for (int j = tb.Range.Cells.Count; j > 1; j--)
+                        {
+                            if (tb.Range.Cells[j].ColumnIndex == iLastColumn)
+                            {
+                                tb.Range.Cells[j].Delete();
+                            }
                         }
                     }
-                    int iLastColumn = tb.Columns.Count;
-                    for(int j = tb.Range.Cells.Count; j > 1; j--)
-                    {
-                        if (tb.Range.Cells[j].ColumnIndex == iLastColumn)
-                        {
-                            tb.Range.Cells[j].Delete();
-                        }
-                    }
-                }
                 oSignatureEntry.Add(SigName + "_reply", TemplateDocu.Tables[1].Range);
                 oSignatureObject.ReplyMessageSignature = SigName + "_reply";
                 //set default compose & reply mail font
