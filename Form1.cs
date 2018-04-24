@@ -86,9 +86,12 @@ namespace MaycroftOL
                 SetText(TemplateDocu, "Skype", tbSkype.Text);
                 //turn Skype to hyperlink
                 Word.Range rg = TemplateDocu.SelectContentControlsByTag("Skype")[1].Range;
-                Word.Hyperlink hl = TemplateDocu.Hyperlinks.Add(rg, "emailto:" + rg.Text);
-                //set hyperlink font
-                hl.Range.Font.Name = "Arial";
+                //use a predefined hyperlink to hold font parameters 
+                if (rg.Hyperlinks.Count > 0)
+                {
+                    rg.Hyperlinks[1].Address = "mailto:" + rg.Text.Trim();
+                }
+                //Word.Hyperlink hl = TemplateDocu.Hyperlinks.Add(Anchor: rg, Address: "mailto:" + rg.Text.Trim(), TextToDisplay: rg.Text.Trim());
                 if (TemplateDocu.Hyperlinks.Count > 0)
                 {
                     for (int i = 1; i <= TemplateDocu.Hyperlinks.Count; i++)
